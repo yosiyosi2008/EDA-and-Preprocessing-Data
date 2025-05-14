@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from statsmodels.tsa.seasonal import seasonal_decompose
 
 # Cargar datos.
-url = 'https://raw.githubusercontent.com/jbrownlee/Datasets/master/airline-passengers.csv'
+url = https://raw.githubusercontent.com/yosiyosi2008/EDA-and-Preprocessing-Data/refs/heads/main/airline_passengers
 df = pd.read_csv(url)
 
 # Preprocesamiento
