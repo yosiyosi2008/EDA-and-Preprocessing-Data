@@ -1,0 +1,32 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from statsmodels.tsa.seasonal import seasonal_decompose
+
+# Cargar datos.
+url = 'https://raw.githubusercontent.com/jbrownlee/Datasets/master/airline-passengers.csv'
+df = pd.read_csv(url)
+
+# Preprocesamiento
+df['Month'] = pd.to_datetime(df['Month'])
+df.set_index('Month', inplace=True)
+df.rename(columns={'Passengers': 'Pasajeros'}, inplace=True)
+
+# Imputar valores faltantes (simulados)
+df.iloc[5:7] = np.nan
+df['Pasajeros'].interpolate(inplace=True)
+
+# Resampleo mensual → trimestral
+df_trimestral = df.resample('Q').mean()
+
+# Suavizado
+df['rolling_mean'] = df['Pasajeros'].rolling(window=5).mean()
+
+# Visualización
+df[['Pasajeros', 'rolling_mean']].plot(title='Pasajeros y Suavizado')
+plt.show()
+
+# Descomposición
+result = seasonal_decompose(df['Pasajeros'], model='multiplicative', period=12)
+result.plot()
+plt.show()
