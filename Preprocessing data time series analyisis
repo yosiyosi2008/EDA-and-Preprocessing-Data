@@ -3,30 +3,31 @@ import numpy as np
 import matplotlib.pyplot as plt
 from statsmodels.tsa.seasonal import seasonal_decompose
 
-# Cargar datos.
-url = https://raw.githubusercontent.com/yosiyosi2008/EDA-and-Preprocessing-Data/refs/heads/main/airline_passengers
+# Load data
+url = "https://raw.githubusercontent.com/yosiyosi2008/EDA-and-Preprocessing-Data/refs/heads/main/airline_passengers"
 df = pd.read_csv(url)
 
-# Preprocesamiento
+# Preprocessing (What preprocessing techniques are being applied in this block?)
 df['Month'] = pd.to_datetime(df['Month'])
 df.set_index('Month', inplace=True)
-df.rename(columns={'Passengers': 'Pasajeros'}, inplace=True)
+df.rename(columns={'Passengers': 'Passengers'}, inplace=True)  # Optional renaming, no effect here
 
-# Imputar valores faltantes (simulados)
+# Missing value imputation (What technique is being used to impute missing values? Are there better techniques?)
 df.iloc[5:7] = np.nan
-df['Pasajeros'].interpolate(inplace=True)
+df['Passengers'].interpolate(inplace=True)
 
-# Resampleo mensual → trimestral
-df_trimestral = df.resample('Q').mean()
+# Monthly resampling (What is the time frequency?)
+df_quarterly = df.resample('Q').mean()
 
-# Suavizado
-df['rolling_mean'] = df['Pasajeros'].rolling(window=5).mean()
+# Smoothing
+df['rolling_mean'] = df['Passengers'].rolling(window=5).mean()
 
-# Visualización
-df[['Pasajeros', 'rolling_mean']].plot(title='Pasajeros y Suavizado')
+# Visualization
+df[['Passengers', 'rolling_mean']].plot(title='Passengers and Smoothing')
 plt.show()
 
-# Descomposición
-result = seasonal_decompose(df['Pasajeros'], model='multiplicative', period=12)
+# Decomposition
+result = seasonal_decompose(df['Passengers'], model='multiplicative', period=12)
 result.plot()
 plt.show()
+
